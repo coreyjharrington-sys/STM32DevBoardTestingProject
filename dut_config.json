@@ -1,0 +1,7 @@
+{
+  "STM32DevBoard": {
+    "vid": "0x0483",
+    "pid": "0x5740",
+    "baudrate": 115200
+  }
+}
