@@ -35,6 +35,7 @@ pip-wheel-metadata/
 htmlcov/
 coverage.xml
 pytest_cache/
+.pytest_cache/
 .mypy_cache/
 ruff_cache/
 

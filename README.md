@@ -108,6 +108,37 @@ Test artifacts (logs, HTML output, temp files) are fully ignored via `.gitignore
 
 ---
 
+## 🐳 Dockerized Firmware Build
+
+A Docker container is provided for **reproducible STM32F103 firmware builds**. It includes the ARM toolchain and necessary libraries.
+
+### Usage
+
+Build the Docker image once:
+
+```bash
+docker build -t stm32devboardcompiler .
+```
+
+Compile firmware from your local source by mounting the repo:
+
+```bash
+docker run --rm -v ${PWD}:/workspace -w /workspace/firmware stm32devboardcompiler make all
+```
+
+To clean and rebuild:
+
+```bash
+docker run --rm -v ${PWD}:/workspace -w /workspace/firmware stm32devboardcompiler make clean all
+```
+
+**Notes:**
+
+* The container is purely for building firmware; Python HITL tests run on the host to access the physical board.
+* Source code and Makefile remain on the host, so edits are immediately reflected in builds.
+
+---
+
 ## ⚙️ GitHub Actions CI
 
 The automated pipeline runs on every:
@@ -154,6 +185,7 @@ This file determines which device to test against:
     "baudrate": 115200
 }
 ```
+
 
 Pytest uses these identifiers to automatically determine the correct COM port.
 
