@@ -1,0 +1,75 @@
+name: HITL Demo Workflow
+
+on:
+  workflow_dispatch:   # manual trigger for testing
+  pull_request:        # run on PRs into main
+  push:                # run when branch pushed to remote repo
+
+jobs:
+  hitl-test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Ensure Docker is available
+        shell: powershell
+        run: |
+          docker --version
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Docker not found"
+            exit 1
+          }
+
+      - name: Build Embedded Project with Docker
+        shell: powershell
+        run: |
+          docker run --rm -v "$(Get-Location):/workspace" `
+          -w /workspace/firmware stm32devboardcompiler make clean all
+
+      - name: Ensure STM32_Programmer_CLI is available
+        shell: powershell
+        run: |
+          STM32_Programmer_CLI --version
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "STM32_Programmer_CLI not found"
+            exit 1
+          }
+        
+      - name: Program the STM32Devboard
+        shell: powershell
+        run: STM32_Programmer_CLI -c port=SWD -d firmware/build/Devboardv1.0Project.bin 0x08000000 -rst
+
+
+      - name: Verify Python installation
+        shell: powershell
+        run: |
+          python --version
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Python not found"
+            exit 1
+          }
+
+      - name: Ensure Conda is available
+        shell: powershell
+        run: |
+          conda --version
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Conda not found"
+            exit 1
+          }
+        
+      - name: Set up Conda environment
+        shell: powershell
+        run: |
+          & "$((conda info --base))\shell\condabin\conda-hook.ps1"
+          conda activate testframework
+          conda env update --file environment.yml --name testframework --prune
+
+      - name: Run HITL tests
+        shell: powershell
+        run: |
+          & "$((conda info --base))\shell\condabin\conda-hook.ps1"
+          conda activate testframework
+          python -m pytest --maxfail=1 --disable-warnings -q

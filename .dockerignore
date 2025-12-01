@@ -1,0 +1,43 @@
+# Ignore KiCad hardware designs
+hardware/
+hardware/**
+
+# Ignore python test scripts and pytest config
+tests/
+tests/**
+pytest.ini
+conftest.py
+.pytest_cache/
+
+# Ignore typical dev clutter
+.vscode/
+.idea/
+*.code-workspace
+
+# Ignore build artifacts
+build/
+dist/
+out/
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+
+# Ignore firmware upload logs
+upload_logs/
+
+# Ignore Git repository data
+.git/
+.gitignore
+
+# Ignore OS/editor temp files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Ignore Dockerfile leftovers
+docker-compose.yml
+*.env
