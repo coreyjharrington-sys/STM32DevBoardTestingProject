@@ -177,3 +177,7 @@ See the `LICENSE` file for details.
 * Multi-device testing support
 * Hardware fault injection
 * Coverage reporting and test data visualization
+* Linting and SCA of Embedded Code
+* Add I2C and UART communcation
+* Add automated testing with logic analyzer
+* ccache in Docker for faster builds
