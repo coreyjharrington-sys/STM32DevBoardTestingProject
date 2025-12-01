@@ -203,7 +203,6 @@ See the `LICENSE` file for details.
 ## 🛠️ Future Improvements
 
 * SQL logging of test metrics
-* Mock serial interface for Pytest-only simulations
 * More extensive command set
 * Automated hardware reset between test cycles
 * Multi-device testing support
