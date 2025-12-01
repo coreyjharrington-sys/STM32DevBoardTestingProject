@@ -40,8 +40,7 @@ jobs:
       - name: Program the STM32Devboard
         shell: powershell
         run: |
-          STM32_Programmer_CLI -c port=SWD `
-          -d firmware/build/Devboardv1.0Project.bin -a 0x08000000 -rst
+          STM32_Programmer_CLI -c port=SWD -d firmware/build/Devboardv1.0Project.bin -a 0x08000000 -rst
 
       - name: Verify Python installation
         shell: powershell
