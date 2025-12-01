@@ -14,25 +14,55 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Ensure Docker is available
-        run: docker --version || { echo "Docker not found"; exit 1; }
-        
+        shell: powershell
+        run: |
+          docker --version
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Docker not found"
+            exit 1
+          }
+
       - name: Build Embedded Project with Docker
-        run: docker run --rm -v ${PWD}:/workspace -w /workspace/firmware stm32devboardcompiler make clean all
+        shell: powershell
+        run: |
+          docker run --rm -v "$(Get-Location):/workspace" `
+          -w /workspace/firmware stm32devboardcompiler make clean all
 
       - name: Ensure CubeProgrammerCLI is available
-        run: CubeProgrammerCLI --version || { echo "CubeProgrammerCLI not found"; exit 1; }
+        shell: powershell
+        run: |
+          CubeProgrammerCLI --version
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "CubeProgrammerCLI not found"
+            exit 1
+          }
 
       - name: Program the STM32Devboard
+        shell: powershell
         run: CubeProgrammerCLI -c port=SWD mode=UR -d STM32Devboard.bin -v
 
       - name: Verify Python installation
-        run: python --version || { echo "Python not found"; exit 1; }
+        shell: powershell
+        run: |
+          python --version
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Python not found"
+            exit 1
+          }
 
       - name: Ensure conda is available
-        run: conda --version || { echo "Conda not found"; exit 1; }
+        shell: powershell
+        run: |
+          conda --version
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Conda not found"
+            exit 1
+          }
         
       - name: Install Python dependencies with Conda
-        run: conda env update --file environment.yml --name testframework --prune
+        shell: powershell
+        run: |
+          conda env update --file environment.yml --name testframework --prune
 
       - name: Install Python dependencies with Conda
         shell: powershell
