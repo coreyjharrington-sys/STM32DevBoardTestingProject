@@ -39,18 +39,7 @@ jobs:
         
       - name: Program the STM32Devboard
         shell: powershell
-        run: |
-          # Build the absolute path to the firmware binary
-          $binPath = Join-Path $PWD "firmware/build/Devboardv1.0Project.bin"
-          
-          # Check if the binary exists
-          if (-Not (Test-Path $binPath)) {
-              Write-Host "Binary not found: $binPath"
-              exit 1
-          }
-
-          # Flash the STM32 using STM32_Programmer_CLI
-          STM32_Programmer_CLI -c "port=SWD" -d "$binPath" --format bin -a "0x08000000" -rst
+        run: STM32_Programmer_CLI -c port=SWD -d firmware/build/Devboardv1.0Project.bin 0x08000000 -rst
 
 
       - name: Verify Python installation
