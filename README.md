@@ -141,20 +141,32 @@ docker run --rm -v ${PWD}:/workspace -w /workspace/firmware stm32devboardcompile
 
 ## ⚙️ GitHub Actions CI
 
-The automated pipeline runs on every:
+Our CI/CD pipeline is defined in `.github/workflows/*.yml` files using GitHub Actions syntax.  
+Each workflow specifies **triggers** under the `on:` key and **jobs** under the `jobs:` key.
 
-* **Push**
-* **Pull request**
+### 🔔 Triggers
+The workflow runs automatically on:
+- **Push** → any branch pushed to the remote repo
+- **Pull request** → PRs targeting `main`
+- **workflow_dispatch** → manual trigger from the Actions tab
 
-Workflow steps:
+### 🛠 Workflow steps
+The `hitl-test` job runs on a **self‑hosted runner** (with STM32 hardware attached) and performs:
 
-1. Install ARM toolchain & Python dependencies
-2. Build firmware
-3. Flash firmware onto the STM32F103C8T6
-4. Run Pytest HITL tests on the physical device
-5. Upload logs, artifacts, and test summaries
+1. **Checkout repo** – pulls the latest code
+2. **Ensure Python & pip** – upgrades pip, setuptools, wheel
+3. **Install dependencies** – installs requirements from `requirements.txt`
+4. **Check CubeProgrammerCLI** – verifies ST’s programmer tool is available on the runner
+5. **Build firmware** – compiles with Dockerized ARM toolchain (`make clean all`)
+6. **Flash firmware** – programs the STM32F103C8T6 via CubeProgrammerCLI
+7. **Run HITL tests** – executes `pytest` against the physical device
+8. **Upload artifacts** – logs, test summaries, and build outputs can be stored for review
 
-This creates a fully automated feedback loop for both firmware and hardware behavior.
+### 🔄 Feedback loop
+This setup provides a **fully automated feedback loop**:
+- Firmware is built and flashed
+- Hardware‑in‑the‑loop tests validate behavior
+- Results are collected and surfaced directly in GitHub
 
 ---
 

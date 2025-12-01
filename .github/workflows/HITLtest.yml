@@ -1,0 +1,37 @@
+name: HITL Demo Workflow
+
+on:
+  workflow_dispatch:   # manual trigger for testing
+  pull_request:        # run on PRs into main
+  push:                # run when branch pushed to remote repo
+
+jobs:
+  hitl-test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Ensure pip is available
+        run: |
+          python -m ensurepip --upgrade
+          python -m pip install --upgrade pip setuptools wheel
+        
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Check CubeProgrammerCLI
+        run: |
+          CubeProgrammerCLI --version || { echo "CubeProgrammerCLI not found"; exit 1; }
+    
+      - name: Build Embedded Project with Docker
+        run: |
+          docker run --rm -v ${PWD}:/workspace -w /workspace/firmware stm32devboardcompiler make clean all
+
+      - name: Program the STM32Devboard
+        run: |
+          CubeProgrammerCLI -c port=SWD mode=UR -d STM32Devboard.bin -v
+
+      - name: Run HITL tests
+        run: python -m pytest --maxfail=1 --disable-warnings -q
