@@ -67,6 +67,12 @@ jobs:
           conda activate testframework
           conda env update --file environment.yml --name testframework --prune
 
+      - name: Pause for USB reconnect
+        shell: powershell
+        run: |
+          Write-Host "Please reconnect the USB cable now."
+          Read-Host "Press Enter once the USB cable is reconnected to continue..."
+          
       - name: Run HITL tests
         shell: powershell
         run: |
