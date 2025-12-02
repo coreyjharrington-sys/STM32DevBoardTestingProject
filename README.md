@@ -1,6 +1,8 @@
 # STM32Devboard – Firmware + HITL Simulation in CI
 
-![KiCad Schematic](Pics/Board.jpg) ![Test Setup](Pics/TestHarness.jpg)
+![Test Setup](Pics/Workflow.jpg)
+![KiCad Schematic](Pics/Board.jpg)
+![Test Setup](Pics/TestHarness.jpg)
 
 *A combined hardware + firmware + automated test demonstration project*
 
