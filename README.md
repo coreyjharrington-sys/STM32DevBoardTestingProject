@@ -1,5 +1,7 @@
 # STM32Devboard – Firmware + HITL Simulation in CI
 
+![KiCad Schematic](Pics/Board.jpg) ![Test Setup](Pics/TestHarness.jpg)
+
 *A combined hardware + firmware + automated test demonstration project*
 
 This project demonstrates a **Hardware-In-The-Loop (HITL)-style automated test pipeline** using a **custom STM32F103C8T6 development board that I designed in KiCad**, combined with firmware validation using **Pytest** and **GitHub Actions**.
