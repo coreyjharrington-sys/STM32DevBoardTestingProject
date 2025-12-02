@@ -22,7 +22,7 @@ jobs:
             exit 1
           }
 
-      - name: Build Embedded Project with Docker
+      - name: Create docker container for STM32Devboard compilation
         shell: powershell
         run: |
           docker run --rm -v "$(Get-Location):/workspace" `
@@ -71,5 +71,4 @@ jobs:
         shell: powershell
         run: |
           & "$((conda info --base))\shell\condabin\conda-hook.ps1"
-          conda activate testframework
           python -m pytest --maxfail=1 --disable-warnings -q
