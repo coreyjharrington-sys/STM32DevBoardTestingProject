@@ -25,7 +25,8 @@ jobs:
       - name: Create docker container for STM32Devboard compilation
         shell: powershell
         run: |
-          docker run --rm -v "$(Get-Location)\firmware:/workspace/firmware" -w /workspace/firmware stm32devboardcompiler make clean all
+          docker run --rm -v "$(Get-Location)\firmware:/workspace/firmware" '
+          stm32devboardcompiler make clean all
 
       - name: Ensure STM32_Programmer_CLI is available
         shell: powershell
