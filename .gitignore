@@ -29,6 +29,7 @@ ENV/
 build/
 dist/
 pip-wheel-metadata/
+results.xml
 
 # Python test & tool outputs
 .coverage

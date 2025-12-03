@@ -78,3 +78,16 @@ jobs:
         run: |
           & "$((conda info --base))\shell\condabin\conda-hook.ps1"
           python -m pytest --maxfail=1 --disable-warnings -q
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: results.xml
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs
+          path: TestReport.html
+
