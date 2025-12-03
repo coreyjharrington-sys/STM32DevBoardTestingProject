@@ -67,8 +67,26 @@ jobs:
           conda activate testframework
           conda env update --file environment.yml --name testframework --prune
 
+      - name: Pause for USB reconnect
+        shell: powershell
+        run: |
+          Write-Host "Please reconnect the USB cable now."
+          Read-Host "Press Enter once the USB cable is reconnected to continue..."
+          
       - name: Run HITL tests
         shell: powershell
         run: |
           & "$((conda info --base))\shell\condabin\conda-hook.ps1"
           python -m pytest --maxfail=1 --disable-warnings -q
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: results.xml
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: TestReport.html
