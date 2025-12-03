@@ -67,6 +67,11 @@ The PCB and schematic files are included so reviewers can inspect routing, compo
 
 This hardware is used directly in the HITL CI workflow.
 
+Note: If you wish to run this demo yourself a Blue Pill Developement board can be sustituted.
+
+Note: Credit to Phil's Lab for board design tutorial
+https://www.youtube.com/watch?v=aVUqaB0IMh4
+
 ---
 
 ## 🧩 Firmware Overview
@@ -84,6 +89,8 @@ It implements a UART command interface supporting:
 * A small set of additional commands used by the test suite
 
 This makes the board ideal for CI-driven firmware verification.
+
+Note: If running this demo use ST-LINK V2 Programmer for flashing the board.
 
 ---
 
