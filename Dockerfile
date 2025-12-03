@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # -----------------------------
 # Set working directory inside container
 # -----------------------------
-WORKDIR /workspace
+WORKDIR /workspace/firmware
 
 # -----------------------------
 # Notes:
