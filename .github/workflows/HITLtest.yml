@@ -21,11 +21,12 @@ jobs:
             Write-Host "Docker not found"
             exit 1
           }
-
+        #Creates the container and copies in and 
+        #sets working directory to /workspace/firmware
       - name: Create docker container for STM32Devboard compilation
         shell: powershell
         run: |
-          docker run --rm -v "$(Get-Location):/workspace" `
+          docker run --rm -v "$(Get-Location):/workspace/firmware" `
           -w /workspace/firmware stm32devboardcompiler make clean all
 
       - name: Ensure STM32_Programmer_CLI is available
@@ -36,7 +37,7 @@ jobs:
             Write-Host "STM32_Programmer_CLI not found"
             exit 1
           }
-        
+        #Also resets the board
       - name: Program the STM32Devboard
         shell: powershell
         run: STM32_Programmer_CLI -c port=SWD -d firmware/build/Devboardv1.0Project.bin 0x08000000 -rst
