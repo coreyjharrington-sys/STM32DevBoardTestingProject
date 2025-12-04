@@ -88,9 +88,9 @@ pipeline {
             }
         }
 
-        stage('Pause for USB reconnect') {
+        stage('Wait 30 seconds') {
             steps {
-                input message: 'Please reconnect the USB cable now, then click Continue.'
+                sleep time: 30, unit: 'SECONDS'
             }
         }
 
