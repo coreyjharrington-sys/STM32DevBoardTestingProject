@@ -16,39 +16,39 @@ pipeline {
 
         stage('Ensure Docker is available') {
             steps {
-                bat '''
+                powershell '''
                 docker --version
-                if %ERRORLEVEL% NEQ 0 (
-                  echo Docker not found
-                  exit /b 1
-                )
+                if ($LASTEXITCODE -ne 0) {
+                  Write-Host "Docker not found"
+                  exit 1
+                }
                 '''
             }
         }
 
         stage('Compile in Docker') {
             steps {
-                bat '''
-                docker run --rm -v "%WORKSPACE%\\firmware:/workspace/firmware" stm32devboardcompiler make clean all
+                powershell '''
+                docker run --rm -v "$env:WORKSPACE\\firmware:/workspace/firmware" stm32devboardcompiler make clean all
                 '''
             }
         }
 
         stage('Ensure STM32 Programmer CLI is available') {
             steps {
-                bat '''
+                powershell '''
                 STM32_Programmer_CLI --version
-                if %ERRORLEVEL% NEQ 0 (
-                  echo STM32_Programmer_CLI not found
-                  exit /b 1
-                )
+                if ($LASTEXITCODE -ne 0) {
+                  Write-Host "STM32_Programmer_CLI not found"
+                  exit 1
+                }
                 '''
             }
         }
 
         stage('Program STM32 Devboard') {
             steps {
-                bat '''
+                powershell '''
                 STM32_Programmer_CLI -c port=SWD -d firmware\\build\\Devboardv1.0Project.bin 0x08000000 -rst
                 '''
             }
@@ -56,32 +56,32 @@ pipeline {
 
         stage('Verify Python installation') {
             steps {
-                bat '''
+                powershell '''
                 python --version
-                if %ERRORLEVEL% NEQ 0 (
-                  echo Python not found
-                  exit /b 1
-                )
+                if ($LASTEXITCODE -ne 0) {
+                  Write-Host "Python not found"
+                  exit 1
+                }
                 '''
             }
         }
 
         stage('Ensure Conda is available') {
             steps {
-                bat '''
+                powershell '''
                 conda --version
-                if %ERRORLEVEL% NEQ 0 (
-                  echo Conda not found
-                  exit /b 1
-                )
+                if ($LASTEXITCODE -ne 0) {
+                  Write-Host "Conda not found"
+                  exit 1
+                }
                 '''
             }
         }
 
         stage('Set up Conda environment') {
             steps {
-                bat '''
-                call "%CONDA_PREFIX%\\shell\\condabin\\conda-hook.ps1"
+                powershell '''
+                & "$env:CONDA_PREFIX\\shell\\condabin\\conda-hook.ps1"
                 conda activate testframework
                 conda env update --file environment.yml --name testframework --prune
                 '''
@@ -96,8 +96,9 @@ pipeline {
 
         stage('Run HITL tests') {
             steps {
-                bat '''
-                call "%CONDA_PREFIX%\\shell\\condabin\\conda-hook.ps1"
+                powershell '''
+                & "$env:CONDA_PREFIX\\shell\\condabin\\conda-hook.ps1"
+                conda activate testframework
                 python -m pytest --maxfail=1 --disable-warnings -q
                 '''
             }
