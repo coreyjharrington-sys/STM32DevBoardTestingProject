@@ -1,11 +1,11 @@
 pipeline {
     agent { label 'self-hosted' }   // run on Windows Jenkins agent
 
-    triggers {
-        // Equivalent to workflow_dispatch, push, pull_request
-        // Jenkins doesn't have native PR triggers without plugins,
-        // but you can configure GitHub webhooks to trigger builds.
-    }
+    // triggers {
+    //     // Equivalent to workflow_dispatch, push, pull_request
+    //     // Jenkins doesn't have native PR triggers without plugins,
+    //     // but you can configure GitHub webhooks to trigger builds.
+    // }
 
     stages {
         stage('Checkout repo') {
