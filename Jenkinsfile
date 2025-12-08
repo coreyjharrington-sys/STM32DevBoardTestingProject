@@ -31,6 +31,8 @@ pipeline {
                 powershell '''
                 docker run --rm -v "$env:WORKSPACE\\firmware:/workspace/firmware" stm32devboardcompiler make clean all
                 '''
+                // Archive the compiled binary
+                archiveArtifacts artifacts: 'firmware/build/Devboardv1.0Project.bin', fingerprint: true
             }
         }
 
